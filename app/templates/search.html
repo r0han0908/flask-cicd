@@ -1,0 +1,168 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h4><i class="fas fa-search"></i> Search Users</h4>
+            </div>
+            <div class="card-body">
+                <form method="GET" action="{{ url_for('main.search') }}">
+                    <div class="input-group">
+                        <input type="search" name="query" class="form-control" 
+                               placeholder="Search for users..." 
+                               value="{{ request.args.get('query', '') }}">
+                        <button class="btn btn-primary" type="submit">
+                            <i class="fas fa-search"></i> Search
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Search Results -->
+        {% if request.args.get('query') %}
+            <h5>Search results for "{{ request.args.get('query') }}"</h5>
+            
+            {% if users.items %}
+                {% for user in users.items %}
+                    <div class="card mb-3">
+                        <div class="card-body search-result-item">
+                            <div class="d-flex align-items-center">
+                                <img src="{{ url_for('static', filename='uploads/avatars/' + user.avatar) }}" 
+                                     alt="Avatar" class="post-avatar me-3">
+                                <div class="flex-grow-1">
+                                    <h5 class="mb-1">
+                                        <a href="{{ url_for('users.profile', username=user.username) }}" 
+                                           class="text-decoration-none">{{ user.username }}</a>
+                                    </h5>
+                                    {% if user.bio %}
+                                        <p class="text-muted mb-1 text-truncate-2">{{ user.bio }}</p>
+                                    {% endif %}
+                                    <small class="text-muted">
+                                        {{ user.posts.count() }} posts • 
+                                        {{ user.followers.count() }} followers • 
+                                        Joined {{ user.created_at.strftime('%B %Y') }}
+                                    </small>
+                                </div>
+                                
+                                {% if current_user.is_authenticated and current_user != user %}
+                                    <div class="ms-3">
+                                        {% if current_user.is_following(user) %}
+                                            <button class="btn btn-outline-secondary btn-sm follow-btn" 
+                                                    data-username="{{ user.username }}" 
+                                                    data-following="true">
+                                                <i class="fas fa-user-minus"></i> Unfollow
+                                            </button>
+                                        {% else %}
+                                            <button class="btn btn-primary btn-sm follow-btn" 
+                                                    data-username="{{ user.username }}" 
+                                                    data-following="false">
+                                                <i class="fas fa-user-plus"></i> Follow
+                                            </button>
+                                        {% endif %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+
+                <!-- Pagination -->
+                {% if users.pages > 1 %}
+                    <nav aria-label="Search pagination">
+                        <ul class="pagination justify-content-center">
+                            {% if users.has_prev %}
+                                <li class="page-item">
+                                    <a class="page-link" href="{{ url_for('main.search', query=request.args.get('query'), page=users.prev_num) }}">Previous</a>
+                                </li>
+                            {% endif %}
+                            
+                            {% for page_num in users.iter_pages() %}
+                                {% if page_num %}
+                                    {% if page_num != users.page %}
+                                        <li class="page-item">
+                                            <a class="page-link" href="{{ url_for('main.search', query=request.args.get('query'), page=page_num) }}">{{ page_num }}</a>
+                                        </li>
+                                    {% else %}
+                                        <li class="page-item active">
+                                            <span class="page-link">{{ page_num }}</span>
+                                        </li>
+                                    {% endif %}
+                                {% else %}
+                                    <li class="page-item disabled">
+                                        <span class="page-link">...</span>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+                            
+                            {% if users.has_next %}
+                                <li class="page-item">
+                                    <a class="page-link" href="{{ url_for('main.search', query=request.args.get('query'), page=users.next_num) }}">Next</a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                {% endif %}
+            {% else %}
+                <div class="text-center py-5">
+                    <i class="fas fa-search fa-3x text-muted mb-3"></i>
+                    <h4 class="text-muted">No users found</h4>
+                    <p class="text-muted">Try searching with different keywords.</p>
+                </div>
+            {% endif %}
+        {% else %}
+            <div class="text-center py-5">
+                <i class="fas fa-search fa-3x text-muted mb-3"></i>
+                <h4 class="text-muted">Find New People</h4>
+                <p class="text-muted">Search for users to connect with and follow their updates.</p>
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h6 class="mb-0"><i class="fas fa-lightbulb"></i> Search Tips</h6>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled mb-0">
+                    <li class="mb-2">
+                        <i class="fas fa-check text-success"></i> 
+                        Use partial usernames to find users
+                    </li>
+                    <li class="mb-2">
+                        <i class="fas fa-check text-success"></i> 
+                        Search is case-insensitive
+                    </li>
+                    <li class="mb-2">
+                        <i class="fas fa-check text-success"></i> 
+                        Click on usernames to view profiles
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        {% if current_user.is_authenticated %}
+            <div class="card">
+                <div class="card-header">
+                    <h6 class="mb-0"><i class="fas fa-users"></i> Your Network</h6>
+                </div>
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col">
+                            <strong>{{ current_user.followers.count() }}</strong><br>
+                            <small class="text-muted">Followers</small>
+                        </div>
+                        <div class="col">
+                            <strong>{{ current_user.followed.count() }}</strong><br>
+                            <small class="text-muted">Following</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

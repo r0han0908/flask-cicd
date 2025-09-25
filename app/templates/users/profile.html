@@ -1,0 +1,183 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-4">
+        <!-- User Profile Card -->
+        <div class="card mb-4">
+            <div class="card-body text-center">
+                <img src="{{ url_for('static', filename='uploads/avatars/' + user.avatar) }}" 
+                     alt="Avatar" class="profile-avatar mb-3">
+                <h4>{{ user.username }}</h4>
+                {% if user.bio %}
+                    <p class="text-muted">{{ user.bio }}</p>
+                {% endif %}
+                <p class="text-muted">
+                    <i class="fas fa-calendar-alt"></i> 
+                    Joined {{ user.created_at.strftime('%B %Y') }}
+                </p>
+                
+                <!-- Stats -->
+                <div class="row text-center mb-3">
+                    <div class="col">
+                        <strong>{{ user.posts.count() }}</strong><br>
+                        <small class="text-muted">Posts</small>
+                    </div>
+                    <div class="col">
+                        <strong class="follower-count">{{ user.followers.count() }}</strong><br>
+                        <small class="text-muted">Followers</small>
+                    </div>
+                    <div class="col">
+                        <strong>{{ user.followed.count() }}</strong><br>
+                        <small class="text-muted">Following</small>
+                    </div>
+                </div>
+                
+                <!-- Action Buttons -->
+                {% if current_user.is_authenticated and current_user != user %}
+                    {% if current_user.is_following(user) %}
+                        <button class="btn btn-outline-secondary follow-btn" 
+                                data-username="{{ user.username }}" 
+                                data-following="true">
+                            <i class="fas fa-user-minus"></i> Unfollow
+                        </button>
+                    {% else %}
+                        <button class="btn btn-primary follow-btn" 
+                                data-username="{{ user.username }}" 
+                                data-following="false">
+                            <i class="fas fa-user-plus"></i> Follow
+                        </button>
+                    {% endif %}
+                {% elif current_user == user %}
+                    <a href="{{ url_for('users.edit_profile') }}" class="btn btn-outline-primary">
+                        <i class="fas fa-edit"></i> Edit Profile
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-8">
+        <!-- User's Posts -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h3>{{ user.username }}'s Posts</h3>
+            <span class="badge bg-secondary">{{ user.posts.count() }} posts</span>
+        </div>
+
+        {% for post in posts.items %}
+            <div class="card mb-4 post-card">
+                <div class="card-header d-flex align-items-center">
+                    <img src="{{ url_for('static', filename='uploads/avatars/' + post.author.avatar) }}" 
+                         alt="Avatar" class="post-avatar me-3">
+                    <div>
+                        <h6 class="mb-0">{{ post.author.username }}</h6>
+                        <small class="text-muted">{{ post.created_at.strftime('%Y-%m-%d %H:%M') }}</small>
+                    </div>
+                    {% if current_user == post.author %}
+                        <div class="ms-auto dropdown">
+                            <button class="btn btn-sm btn-outline-secondary dropdown-toggle" 
+                                    data-bs-toggle="dropdown">
+                                <i class="fas fa-ellipsis-h"></i>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <form method="POST" action="{{ url_for('posts.delete_post', id=post.id) }}" 
+                                          onsubmit="return confirm('Are you sure you want to delete this post?')">
+                                        <button type="submit" class="dropdown-item text-danger">
+                                            <i class="fas fa-trash"></i> Delete
+                                        </button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <div class="card-body">
+                    <p class="card-text">{{ post.content }}</p>
+                    {% if post.image %}
+                        <img src="{{ url_for('static', filename='uploads/posts/' + post.image) }}" 
+                             alt="Post image" class="img-fluid rounded mb-3">
+                    {% endif %}
+                </div>
+                
+                <div class="card-footer">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            {% if current_user.is_authenticated %}
+                                <button class="btn btn-sm btn-outline-danger like-btn" 
+                                        data-post-id="{{ post.id }}"
+                                        data-liked="{{ current_user.has_liked_post(post) }}">
+                                    <i class="fas fa-heart{% if not current_user.has_liked_post(post) %}-o{% endif %}"></i>
+                                    <span class="like-count">{{ post.like_count() }}</span>
+                                </button>
+                            {% else %}
+                                <span class="text-muted">
+                                    <i class="far fa-heart"></i> {{ post.like_count() }}
+                                </span>
+                            {% endif %}
+                            
+                            <a href="{{ url_for('posts.post_detail', id=post.id) }}" 
+                               class="btn btn-sm btn-outline-primary ms-2">
+                                <i class="far fa-comment"></i> {{ post.comment_count() }}
+                            </a>
+                        </div>
+                        <small class="text-muted">
+                            <a href="{{ url_for('posts.post_detail', id=post.id) }}" 
+                               class="text-decoration-none">View details</a>
+                        </small>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="text-center py-5">
+                <i class="fas fa-newspaper fa-3x text-muted mb-3"></i>
+                <h4 class="text-muted">No posts yet</h4>
+                {% if current_user == user %}
+                    <p class="text-muted">Share your first post with the community!</p>
+                    <a href="{{ url_for('posts.create_post') }}" class="btn btn-primary">Create Post</a>
+                {% else %}
+                    <p class="text-muted">{{ user.username }} hasn't posted anything yet.</p>
+                {% endif %}
+            </div>
+        {% endfor %}
+
+        <!-- Pagination -->
+        {% if posts.pages > 1 %}
+            <nav aria-label="Posts pagination">
+                <ul class="pagination justify-content-center">
+                    {% if posts.has_prev %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ url_for('users.profile', username=user.username, page=posts.prev_num) }}">Previous</a>
+                        </li>
+                    {% endif %}
+                    
+                    {% for page_num in posts.iter_pages() %}
+                        {% if page_num %}
+                            {% if page_num != posts.page %}
+                                <li class="page-item">
+                                    <a class="page-link" href="{{ url_for('users.profile', username=user.username, page=page_num) }}">{{ page_num }}</a>
+                                </li>
+                            {% else %}
+                                <li class="page-item active">
+                                    <span class="page-link">{{ page_num }}</span>
+                                </li>
+                            {% endif %}
+                        {% else %}
+                            <li class="page-item disabled">
+                                <span class="page-link">...</span>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                    
+                    {% if posts.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ url_for('users.profile', username=user.username, page=posts.next_num) }}">Next</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
