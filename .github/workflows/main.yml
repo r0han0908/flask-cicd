@@ -1,0 +1,22 @@
+name: start-ci
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-test:
+    runs-on: ubuntu-server
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v5.0.0
+
+      - name: Setting up Python Dependencies
+        uses: actions/setup-python@v6.0.0
+
+      - name: Install Dependencies For the application
+        run: pip install -r requirements.txt
+
+      - name: Run the test
+        run: pytest -q
+          
