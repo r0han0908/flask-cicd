@@ -56,7 +56,7 @@ jobs:
         # Sends a notification to Slack when the pipeline completes successfully 
 ```
 
-📅 Update Log
+# 📅 Update Log
 
 2025-09-25 → Initial pipeline created with:
 
