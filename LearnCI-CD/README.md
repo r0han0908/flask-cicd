@@ -1,8 +1,8 @@
 # 🚀 CI/CD Pipeline – First Steps
 
-This file starts with a simple **CI/CD pipeline** using GitHub Actions.  
-It explains what changes were made and what this workflow file does.  
-We’ll keep adding more complexity as the project grows, but here’s where we begin.  
+This project uses **GitHub Actions** for its CI/CD pipeline.  
+The pipeline ensures code quality, runs tests, and notifies the team via Slack when builds succeed.  
+We’ll continue to extend this as the project grows.  
 
 ---
 
@@ -46,3 +46,25 @@ jobs:
         run: python3 -m pytest tests/ -v
         # Runs all tests in the tests/ folder with verbose output
 
+      - name: Notifying through slack
+        env:
+          SLACK_WEBHOOK_URL : {{ secrets.SLACK_WEBHOOK_URL }}
+        run: |
+          curl -X POST -H 'Content-type: applicaiton/json' \
+          --data '{"text": "The CI pipeline was successful!!"}' \
+          $$SLACK_WEBHOOK_URL
+        # Sends a notification to Slack when the pipeline completes successfully
+
+📅 Update Log
+
+2025-09-25 → Initial pipeline created with:
+
+Checkout, dependencies install, and test run.
+
+2025-09-26 → Added Slack Notification Step:
+
+Sends a message to the Slack workspace once the CI pipeline succeeds.
+
+Uses GitHub Secrets for the webhook URL (SLACK_WEBHOOK_URL).
+
+Includes repo name and branch in the message.
