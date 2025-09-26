@@ -53,7 +53,8 @@ jobs:
           curl -X POST -H 'Content-type: applicaiton/json' \
           --data '{"text": "The CI pipeline was successful!!"}' \
           $$SLACK_WEBHOOK_URL
-        # Sends a notification to Slack when the pipeline completes successfully
+        # Sends a notification to Slack when the pipeline completes successfully 
+```
 
 📅 Update Log
 
