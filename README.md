@@ -21,14 +21,5 @@ The goal is to help aspiring **DevOps Engineers** learn the fundamentals of buil
 
 ---
 
-## 🛠️ Tech Stack  
-
-- **Application Framework:** [Flask](https://flask.palletsprojects.com/)  
-- **CI/CD Tool:** [GitHub Actions](https://docs.github.com/en/actions)  
-- **Language:** Python 3.x  
-- **Package Manager:** pip  
-
----
-
 ## 📂 Repository Structure  
 
