@@ -25,3 +25,10 @@ jobs:
       - name: Run the test
         run: python3 -m pytest tests/ -v
           
+      - name: Notifying through slack
+        env:
+          SLACK_WEBHOOK_URL : {{ secrets.SLACK_WEBHOOK_URL }}
+        run: |
+          curl -X POST -H 'Content-type: applicaiton/json' \
+          --data '{"text": "The CI pipeline was successful!!"}' \
+          $$SLACK_WEBHOOK_URL
