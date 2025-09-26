@@ -12,19 +12,16 @@ This way, the project will grow into a complete **end-to-end DevOps learning jou
 
 ---
 
-## 📌 Current Pipeline Status *(as of 2025-09-25)*  
-
-✅ **Checkout the code** → The repository is pulled into the GitHub Actions runner.  
-✅ **Install dependencies** → All required Python packages are installed.  
-✅ **Run tests (or build)** → Ensures the Flask app works as expected.  
-
-
-
 🔜 **Planned Improvements:**  
 
 - 🐳 **Build & publish Docker images** → Containerize the Flask application.  
 - 📦 **Container orchestration with Kubernetes** → Run the app in a K8s cluster (on-prem).  
 - ☁️ **Deploy to AWS** → Learn to deploy using AWS services (e.g., ECS, EKS, or EC2).  
 - 📈 **Monitoring & alerting** → Add observability using **Prometheus** & **Grafana**.  
+
+------
+
+
+
 
 
