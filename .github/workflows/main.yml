@@ -27,7 +27,7 @@ jobs:
           
       - name: Notifying through slack
         env:
-          SLACK_WEBHOOK_URL : {{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         run: |
           curl -X POST -H 'Content-type: applicaiton/json' \
           --data '{"text": "The CI pipeline was successful!!"}' \
