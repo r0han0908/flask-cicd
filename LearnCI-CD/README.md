@@ -2,7 +2,7 @@
 
 This project uses **GitHub Actions** for its CI/CD pipeline.  
 The pipeline ensures code quality, runs tests, and notifies the team via Slack when builds succeed.  
-We’ll continue to extend this as the project grows.  
+I will continue to extend this as the project grows.  
 
 ---
 
