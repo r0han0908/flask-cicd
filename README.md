@@ -18,6 +18,8 @@ This way, the project will grow into a complete **end-to-end DevOps learning jou
 ✅ **Install dependencies** → All required Python packages are installed.  
 ✅ **Run tests (or build)** → Ensures the Flask app works as expected.  
 
+(../ci-cd/CI_CD_pipeline.drawio.png)
+
 🔜 **Planned Improvements:**  
 
 - 🐳 **Build & publish Docker images** → Containerize the Flask application.  
