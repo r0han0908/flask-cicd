@@ -1,14 +1,34 @@
-This repository contains a simple CI/CD pipeline for a Flask-based social media application, created purely for educational purposes. The pipeline is implemented using GitHub Actions to demonstrate how to automate build, test, and deployment workflows.
+# 🚀 Flask Social Media App – CI/CD Pipeline  
 
-The goal is to help anyone, like me, who wants to become a DevOps Engineer, learn the fundamentals of building a CI/CD pipeline step by step. The README will be updated as changes are made to the pipeline so that the progress and improvements are documented clearly.
+This repository contains a simple **CI/CD pipeline** for a Flask-based social media application, created purely for **educational purposes**.  
 
-Current Status [2025-09-25]:
-The pipeline currently performs the following steps:
+The goal is to help aspiring **DevOps Engineers** learn the fundamentals of building CI/CD pipelines step by step using **GitHub Actions**. As the pipeline evolves, this README will be updated to document progress, improvements, and new stages of automation.  
 
-Checkout the code → grab the repository so the GitHub Actions runner can use it.
+---
 
-Install dependencies → ensure the application has everything it needs to run.
+## 📌 Current Pipeline Status *(as of 2025-09-25)*  
 
-Run tests (or build) → validate that the code works as expected.
+✅ **Checkout the code** → The repository is pulled into the GitHub Actions runner.  
+✅ **Install dependencies** → All required Python packages are installed.  
+✅ **Run tests (or build)** → Ensures the Flask app works as expected.  
 
-Future updates will expand this pipeline to cover more advanced stages of continuous integration and deployment.
+🔜 **Planned Improvements:**  
+- Add linting & static code analysis.  
+- Integrate test coverage reports.  
+- Build & publish Docker images.  
+- Deploy to cloud platforms (e.g., AWS, Azure, or GCP).  
+- Add monitoring & notifications.  
+
+---
+
+## 🛠️ Tech Stack  
+
+- **Application Framework:** [Flask](https://flask.palletsprojects.com/)  
+- **CI/CD Tool:** [GitHub Actions](https://docs.github.com/en/actions)  
+- **Language:** Python 3.x  
+- **Package Manager:** pip  
+
+---
+
+## 📂 Repository Structure  
+
