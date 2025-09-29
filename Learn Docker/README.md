@@ -4,7 +4,7 @@ This is a simple example of how you can containerize the Flask Social Connect ap
 
 ### Our Dockerfile
 
-The project includes a [`Dockerfile`](Dockerfile) in the root directory.
+The project includes a [`Dockerfile`](../Dockerfile) in the root directory.
 
 **What each line does:**
 
