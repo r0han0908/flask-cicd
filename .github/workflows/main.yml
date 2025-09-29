@@ -25,10 +25,23 @@ jobs:
       - name: Run the test
         run: python3 -m pytest tests/ -v
           
-      - name: Notifying through slack
+      - name: Notifying through slack (IF Successful)
+        if: ${{ !failure() }}
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         run: |
           curl -X POST -H 'Content-type: application/json' \
           --data '{"text": "The CI pipeline was successful!!"}' \
           $SLACK_WEBHOOK_URL
+
+      - name: Notifying through slack (IF Failure)
+        if: ${{ failuer() }}
+        env: 
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        uses: slackapi/slack-github-action@v2.1.1
+        with:
+          playload: |
+            { 
+            "text": "The CI pipeline was not successful! ${{ github.repository }} on ${{ github.ref }}"
+            }
+          
