@@ -35,7 +35,7 @@ jobs:
           $SLACK_WEBHOOK_URL
 
       - name: Notifying through slack (IF Failure)
-        if: ${{ failuer() }}
+        if: ${{ failure() }}
         env: 
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         uses: slackapi/slack-github-action@v2.1.1
