@@ -33,23 +33,20 @@ jobs:
     - name: Docker Push to Registry
       run: docker push ${{ secrets.DOCKER_HUB_USERNAME }}/$IMAGE_NAME:$TAG
 
-    - name: Notifying through slack (IF Failure)
-      if: ${{ failure() }}
-      env: 
-        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-      uses: slackapi/slack-github-action@v2.1.1
-      with:
-        webhook-type: 'incoming-webhook'
-        webhook-url: SLACK_WEBHOOK_URL
-        text: "The CD pipeline was successful! ${{ github.repository }} on ${{ github.ref }}"
-
-    - name: Notifying through slack (IF Success)
+    - name: Notifying through slack (IF Successful)
       if: ${{ !failure() }}
-      env: 
+      env:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-      uses: slackapi/slack-github-action@v2.1.1
-      with:
-        webhook-type: 'incoming-webhook'
-        webhook-url: SLACK_WEBHOOK_URL
-        text: "The CD pipeline was not successful! ${{ github.repository }} on ${{ github.ref }}"
-          
+      run: |
+        curl -X POST -H 'Content-type: application/json' \
+        --data '{"text": "The Docker Worflow pipeline was successful!!"}' \
+        $SLACK_WEBHOOK_URL    
+
+    - name: Notifying through slack (IF Failure!)
+      if: ${{ failure() }}
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      run: |
+        curl -X POST -H 'Content-type: application/json' \
+        --data '{"text": "The Docker Worflow pipeline was not successful!!"}' \
+        $SLACK_WEBHOOK_URL   
