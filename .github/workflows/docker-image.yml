@@ -49,6 +49,8 @@ jobs:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
       uses: slackapi/slack-github-action@v2.1.1
       with:
+        webhook-type: 'incoming-webhook'
+        webhook-url: SLACK_WEBHOOK_URL
         playload: |
           { 
             "text": "The CD pipeline was not successful! ${{ github.repository }} on ${{ github.ref }}"
