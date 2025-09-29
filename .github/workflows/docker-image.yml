@@ -27,7 +27,7 @@ jobs:
         IMAGE_NAME=flask-social_media
         TAG=$(date +%s)
         docker build . -t $IMAGE_NAME:$TAG
-        docker tag ${{ secretes.DOCKER_HUB_USERNAME }}/IMAGE_NAME:TAG
+        docker tag ${{ secrets.DOCKER_HUB_USERNAME }}/IMAGE_NAME:TAG
 
     - name: Docker Push to Registry
       run: docker push ${{ secrets.DOCKER_HUB_USERNAME }}//IMAGE_NAME:TAG
