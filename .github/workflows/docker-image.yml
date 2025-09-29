@@ -33,23 +33,23 @@ jobs:
       run: docker push ${{ secretes.DOCKER_HUB_USERNAME }}//IMAGE_NAME:TAG
 
     - name: Notifying through slack (IF Failure)
-        if: ${{ failure() }}
-        env: 
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-        uses: slackapi/slack-github-action@v2.1.1
-        with:
-          playload: |
-            { 
-            "text": "The CD pipeline was not successful! ${{ github.repository }} on ${{ github.ref }}"
-            }
+      if: ${{ failure() }}
+      env: 
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      uses: slackapi/slack-github-action@v2.1.1
+      with:
+        playload: |
+          { 
+           "text": "The CD pipeline was not successful! ${{ github.repository }} on ${{ github.ref }}"
+          }
 
-     - name: Notifying through slack (IF Success)
-        if: ${{ !failure() }}
-        env: 
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-        uses: slackapi/slack-github-action@v2.1.1
-        with:
-          playload: |
-            { 
-            "text": "The CD pipeline was successful! ${{ github.repository }} on ${{ github.ref }}"
-            }
+    - name: Notifying through slack (IF Success)
+      if: ${{ !failure() }}
+      env: 
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      uses: slackapi/slack-github-action@v2.1.1
+      with:
+        playload: |
+          { 
+            "text": "The CD pipeline was not successful! ${{ github.repository }} on ${{ github.ref }}"
+          }
