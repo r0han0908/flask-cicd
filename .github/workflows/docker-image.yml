@@ -19,8 +19,8 @@ jobs:
     - name: Docker Login
       uses: docker/login-action@v3.6.0
       with: 
-        username: ${{ secretes.DOCKER_HUB_USERNAME }} 
-        password: ${{ secretes.DOCKER_HUB_TOKEN }}
+        username: ${{ secrets.DOCKER_HUB_USERNAME }} 
+        password: ${{ secrets.DOCKER_HUB_TOKEN }}
       
     - name: Build the Docker image
       run: |
@@ -30,7 +30,7 @@ jobs:
         docker tag ${{ secretes.DOCKER_HUB_USERNAME }}/IMAGE_NAME:TAG
 
     - name: Docker Push to Registry
-      run: docker push ${{ secretes.DOCKER_HUB_USERNAME }}//IMAGE_NAME:TAG
+      run: docker push ${{ secrets.DOCKER_HUB_USERNAME }}//IMAGE_NAME:TAG
 
     - name: Notifying through slack (IF Failure)
       if: ${{ failure() }}
