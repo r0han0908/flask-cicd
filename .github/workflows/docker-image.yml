@@ -40,7 +40,7 @@ jobs:
         with:
           playload: |
             { 
-            "text": "The CI pipeline was not successful! ${{ github.repository }} on ${{ github.ref }}"
+            "text": "The CD pipeline was not successful! ${{ github.repository }} on ${{ github.ref }}"
             }
 
      - name: Notifying through slack (IF Success)
@@ -51,5 +51,5 @@ jobs:
         with:
           playload: |
             { 
-            "text": "The CI pipeline was successful! ${{ github.repository }} on ${{ github.ref }}"
+            "text": "The CD pipeline was successful! ${{ github.repository }} on ${{ github.ref }}"
             }
