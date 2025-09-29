@@ -1,0 +1,55 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Docker Login
+      uses: docker/login-action@v3.6.0
+      with: 
+        username: ${{ secretes.DOCKER_HUB_USERNAME }} 
+        password: ${{ secretes.DOCKER_HUB_TOKEN }}
+      
+    - name: Build the Docker image
+      run: |
+        IMAGE_NAME=flask-social_media
+        TAG=$(date +%s)
+        docker build . -t $IMAGE_NAME:$TAG
+        docker tag ${{ secretes.DOCKER_HUB_USERNAME }}/IMAGE_NAME:TAG
+
+    - name: Docker Push to Registry
+      run: docker push ${{ secretes.DOCKER_HUB_USERNAME }}//IMAGE_NAME:TAG
+
+    - name: Notifying through slack (IF Failure)
+        if: ${{ failure() }}
+        env: 
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        uses: slackapi/slack-github-action@v2.1.1
+        with:
+          playload: |
+            { 
+            "text": "The CI pipeline was not successful! ${{ github.repository }} on ${{ github.ref }}"
+            }
+
+     - name: Notifying through slack (IF Success)
+        if: ${{ !failure() }}
+        env: 
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        uses: slackapi/slack-github-action@v2.1.1
+        with:
+          playload: |
+            { 
+            "text": "The CI pipeline was successful! ${{ github.repository }} on ${{ github.ref }}"
+            }
