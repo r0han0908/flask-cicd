@@ -12,9 +12,9 @@ The project includes a [`Dockerfile`](../Dockerfile) in the root directory.
 - **`WORKDIR /app`**: Sets `/app` as the working directory inside the container
 - **`COPY . .`**: Copies all files from your project directory to `/app` in the container
 - **`RUN apt-get update`**: Updates the package manager inside the container
-- **`RUN pip install -r requirements.txt`**: Installs all Python dependencies from [`requirements.txt`](requirements.txt)
+- **`RUN pip install -r requirements.txt`**: Installs all Python dependencies from [`requirements.txt`](../requirements.txt)
 - **`EXPOSE 5000`**: Documents that the app uses port 5000 (Flask's default port)
-- **`CMD ["python", "run.py"]`**: Starts the Flask application using our [`run.py`](run.py) file
+- **`CMD ["python", "run.py"]`**: Starts the Flask application using our [`run.py`](../run.py) file
 
 
 ### Building and Running the Docker Image
