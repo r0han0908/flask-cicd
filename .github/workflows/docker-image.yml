@@ -28,7 +28,7 @@ jobs:
         echo "TAG=v1" >> $GITHUB_ENV
       
     - name: Build the Docker image
-      run: docker build . -t ${{ secrets.DOCKER_HUB_USERNAME }}/$IMAGE_NAME:TAG
+      run: docker build . -t ${{ secrets.DOCKER_HUB_USERNAME }}/$IMAGE_NAME:$TAG
 
     - name: Docker Push to Registry
       run: docker push ${{ secrets.DOCKER_HUB_USERNAME }}/$IMAGE_NAME:$TAG
