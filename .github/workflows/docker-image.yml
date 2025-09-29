@@ -21,12 +21,14 @@ jobs:
       with: 
         username: ${{ secrets.DOCKER_HUB_USERNAME }} 
         password: ${{ secrets.DOCKER_HUB_TOKEN }}
+
+    - name: Set image variables
+      run: |
+        echo "IMAGE_NAME=my-social-media" >> $GITHUB_ENV
+        echo "TAG=$(date +%s)" >> $GITHUB_ENV
       
     - name: Build the Docker image
-      run: |
-        IMAGE_NAME = my-social-media
-        TAG = $(date +%s)
-        docker build . -t ${{ secrets.DOCKER_HUB_USERNAME }}/$IMAGE_NAME:TAG
+      run: docker build . -t ${{ secrets.DOCKER_HUB_USERNAME }}/$IMAGE_NAME:TAG
 
     - name: Docker Push to Registry
       run: docker push ${{ secrets.DOCKER_HUB_USERNAME }}/$IMAGE_NAME:$TAG
