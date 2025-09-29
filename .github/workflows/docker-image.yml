@@ -23,12 +23,13 @@ jobs:
         password: ${{ secrets.DOCKER_HUB_TOKEN }}
       
     - name: Build the Docker image
-      run: docker build . -t ${{ secrets.DOCKER_HUB_USERNAME }}/$IMAGE_NAME:
+      run: |
+        IMAGE_NAME = my-social-media
+        TAG = $(date +%s)
+        docker build . -t ${{ secrets.DOCKER_HUB_USERNAME }}/$IMAGE_NAME:TAG
 
     - name: Docker Push to Registry
-      run: |
-        TAG=$(date +%s)
-        docker push ${{ secrets.DOCKER_HUB_USERNAME }}/my-social-media:TAG
+      run: docker push ${{ secrets.DOCKER_HUB_USERNAME }}/$IMAGE_NAME:$TAG
 
     - name: Notifying through slack (IF Failure)
       if: ${{ failure() }}
